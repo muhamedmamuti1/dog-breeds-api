@@ -20,6 +20,7 @@ class BreedImagesController {
             console.error(error);
             res.status(500).send('Something went wrong!');
         }
+
     }
 
     async createBreedImage(req, res) {

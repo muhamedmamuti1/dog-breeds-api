@@ -45,7 +45,7 @@ Follow the steps below to set up and run the application locally:
 
 2. Tables and indexes to create in your PostgreSQL database:
 
--------------------------- BREEDS TABLE -------------------------------------------
+### Breeds Table
 CREATE TABLE breeds
 (
     id          uuid         NOT NULL PRIMARY KEY,
@@ -57,8 +57,8 @@ CREATE TABLE breeds
 
 CREATE INDEX idx_breeds_name ON breeds (name);
 CREATE TYPE popularity_types AS ENUM ('MOST_POPULAR', 'POPULAR', 'LEAST_POPULAR');
------------------------------------------------------------------------------------
--------------------------- BREED DETAILS TABLE ------------------------------------
+
+### Breed Details Table
 CREATE TABLE breed_details
 (
     id          uuid         NOT NULL PRIMARY KEY,
@@ -73,8 +73,8 @@ CREATE TABLE breed_details
 );
 
 CREATE INDEX idx_breed_details_name ON breed_details (name);
-------------------------------------------------------------------------------------
--------------------------- IMAGES TABLE --------------------------------------------
+
+### Images Table
 CREATE TABLE images
 (
     id         uuid         NOT NULL PRIMARY KEY,
@@ -86,8 +86,8 @@ CREATE TABLE images
 );
 
 CREATE INDEX idx_images_url ON images (url);
-------------------------------------------------------------------------------------
--------------------------- USERS TABLE ---------------------------------------------
+
+### Users Table
 CREATE TYPE user_roles AS ENUM ('ADMIN', 'CLIENT');
 
 CREATE TABLE users
@@ -103,7 +103,6 @@ CREATE TABLE users
     updated_at TIMESTAMP             DEFAULT NULL,
     deleted_at TIMESTAMP             DEFAULT NULL
 );
-------------------------------------------------------------------------------------
 
 3. Update the database connection configuration in `config.js` with your database credentials.
 

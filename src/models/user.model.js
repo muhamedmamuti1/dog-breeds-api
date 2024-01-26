@@ -17,21 +17,17 @@ class UserModel {
     }
 
     async createUser(id, firstName, lastName, username, email, password, role) {
-
-        const result = await pool.query(userQueries.createUser, [id, firstName, lastName, username, email, password, role]);
-        return result.rows[0];
+        await pool.query(userQueries.createUser, [id, firstName, lastName, username, email, password, role]);
     }
 
     async updateUser(id, updatedFields) {
         const {first_name, last_name, username, email, password, role} = updatedFields;
 
-        const result = await pool.query(userQueries.updateUser, [id, first_name, last_name, username, email, password, role]);
-        return result.rows[0];
+        await pool.query(userQueries.updateUser, [id, first_name, last_name, username, email, password, role]);
     }
 
     async deleteUser(id) {
-        const result = await pool.query(userQueries.deleteUser, [id]);
-        return result.rows[0];
+        await pool.query(userQueries.deleteUser, [id]);
     }
 
     async checkIfUserIsDeleted(id) {

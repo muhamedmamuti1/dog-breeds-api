@@ -12,20 +12,15 @@ class BreedImagesModel {
     }
 
     async createBreedImage(imageId, url, breedId) {
-
-        const result = await pool.query(breedImagesQueries.createBreedImage, [imageId, url, breedId]);
-        return result.rows[0];
+        await pool.query(breedImagesQueries.createBreedImage, [imageId, url, breedId]);
     }
 
     async updateBreedImage(breedId, imageId, url) {
-
-        const result = await pool.query(breedImagesQueries.updateBreedImage, [imageId, url, breedId]);
-        return result.rows[0];
+        await pool.query(breedImagesQueries.updateBreedImage, [imageId, url, breedId]);
     }
 
     async deleteBreedImage(breedId, imageId) {
-        const result = await pool.query(breedImagesQueries.deleteBreedImage, [breedId, imageId]);
-        return result.rows[0];
+        await pool.query(breedImagesQueries.deleteBreedImage, [breedId, imageId]);
     }
 
     async getRandomBreedImage(name) {

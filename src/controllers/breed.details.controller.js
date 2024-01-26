@@ -1,4 +1,5 @@
 const BreedDetailsModel = require('../models/breed.details.model');
+const success = require('../response.success');
 
 const breedDetailsModel = new BreedDetailsModel();
 
@@ -48,8 +49,8 @@ class BreedDetailsController {
                 return res.status(400).send('Breed details already exist for this id');
             }
 
-            const breedDetails = await breedDetailsModel.createBreedDetails(detail_id, name, size, temperament, popularity, id);
-            res.json(breedDetails);
+            await breedDetailsModel.createBreedDetails(detail_id, name, size, temperament, popularity, id);
+            res.json(success);
 
         } catch (error) {
             console.error(error);
@@ -67,8 +68,8 @@ class BreedDetailsController {
                 return res.status(404).send('Breed details not found for this id!');
             }
 
-            const updatedBreedDetails = await breedDetailsModel.updateBreedDetails(id, detail_id, updatedFields);
-            res.json(updatedBreedDetails);
+            await breedDetailsModel.updateBreedDetails(id, detail_id, updatedFields);
+            res.json(success);
 
         } catch (error) {
             console.error(error);
@@ -86,12 +87,12 @@ class BreedDetailsController {
                 return res.status(404).send('Breed details not found');
             }
 
-            if (isDeleted) {
+            if (isDeleted.deleted_at != null) {
                 return res.status(400).send('These breed details are already deleted!');
             }
 
-            const deletedBreedDetails = await breedDetailsModel.deleteBreedDetails(id, detail_id);
-            res.json(deletedBreedDetails);
+            await breedDetailsModel.deleteBreedDetails(id, detail_id);
+            res.json(success);
 
         } catch (error) {
             console.error(error);

@@ -1,4 +1,5 @@
 const UserModel = require('../models/user.model');
+const success = require('../response.success');
 
 const userModel = new UserModel();
 
@@ -40,9 +41,8 @@ class UserController {
             if (userExists) {
                 return res.status(400).send("User with this id already exists!");
             }
-
-            const user = await userModel.createUser(id, first_name, last_name, username, email, password, role);
-            res.json(user);
+            await userModel.createUser(id, first_name, last_name, username, email, password, role);
+            res.json(success);
 
         } catch (error) {
             console.error(error);
@@ -59,9 +59,8 @@ class UserController {
             if (!userExists) {
                 return res.status(404).send('User not found!');
             }
-
-            const updatedUser = await userModel.updateUser(id, updatedFields);
-            res.json(updatedUser);
+            await userModel.updateUser(id, updatedFields);
+            res.json(success);
 
         } catch (error) {
             console.error(error);
@@ -79,12 +78,12 @@ class UserController {
                 return res.status(404).send('User not found');
             }
 
-            if (isDeleted) {
+            if (isDeleted.deleted_at != null) {
                 return res.status(400).send('This user is already deleted!');
             }
 
-            const deletedUser = await userModel.deleteUser(id);
-            res.json(deletedUser);
+            await userModel.deleteUser(id);
+            res.json(success);
 
         } catch (error) {
             console.error(error);

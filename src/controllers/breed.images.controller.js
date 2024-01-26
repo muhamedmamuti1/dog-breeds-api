@@ -1,4 +1,5 @@
 const BreedImagesModel = require('../models/breed.images.model');
+const success = require('../response.success');
 
 const breedImagesModel = new BreedImagesModel();
 
@@ -33,9 +34,8 @@ class BreedImagesController {
             if (breedImageExists) {
                 return res.status(400).send('Breed image with this id already exists!');
             }
-
-            const breedImages = await breedImagesModel.createBreedImage(image_id, url, id);
-            res.json(breedImages);
+            await breedImagesModel.createBreedImage(image_id, url, id);
+            res.json(success);
 
         } catch (error) {
             console.error(error);
@@ -52,9 +52,8 @@ class BreedImagesController {
             if (!breedImageExists) {
                 return res.status(404).send('Breed image not found!');
             }
-
-            const updatedBreedImages = await breedImagesModel.updateBreedImage(id, image_id, url);
-            res.json(updatedBreedImages);
+            await breedImagesModel.updateBreedImage(id, image_id, url);
+            res.json(success);
 
         } catch (error) {
             console.error(error);
@@ -72,12 +71,11 @@ class BreedImagesController {
                 return res.status(404).send('Breed image not found');
             }
 
-            if (isDeleted) {
+            if (isDeleted.deleted_at != null) {
                 return res.status(400).send('This image is already deleted!');
             }
-
-            const deletedBreedImages = await breedImagesModel.deleteBreedImage(id, image_id);
-            res.json(deletedBreedImages);
+            await breedImagesModel.deleteBreedImage(id, image_id);
+            res.json(success);
 
         } catch (error) {
             console.error(error);

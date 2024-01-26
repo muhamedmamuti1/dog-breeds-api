@@ -17,21 +17,16 @@ class BreedDetailsModel {
     }
 
     async createBreedDetails(breedDetailId, name, size, temperament, popularity, breedId) {
-
-        const result = await pool.query(breedDetailsQueries.createBreedDetails, [breedDetailId, name, size, temperament, popularity, breedId]);
-        return result.rows[0];
+        await pool.query(breedDetailsQueries.createBreedDetails, [breedDetailId, name, size, temperament, popularity, breedId]);
     }
 
     async updateBreedDetails(breedId, breedDetailId, updatedFields) {
         const {name, size, temperament, popularity} = updatedFields;
-
-        const result = await pool.query(breedDetailsQueries.updateBreedDetails, [breedDetailId, name, size, temperament, popularity, breedId]);
-        return result.rows[0];
+        await pool.query(breedDetailsQueries.updateBreedDetails, [breedDetailId, name, size, temperament, popularity, breedId]);
     }
 
     async deleteBreedDetails(breedId, breedDetailsId) {
-        const result = await pool.query(breedDetailsQueries.deleteBreedDetails, [breedId, breedDetailsId]);
-        return result.rows[0];
+        await pool.query(breedDetailsQueries.deleteBreedDetails, [breedId, breedDetailsId]);
     }
 
     async getAllBreedDetails() {

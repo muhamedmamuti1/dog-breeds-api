@@ -12,21 +12,16 @@ class BreedsModel {
     }
 
     async createBreed(id, name) {
-
-        const result = await pool.query(breedQueries.createBreed, [id, name]);
-        return result.rows[0];
+        await pool.query(breedQueries.createBreed, [id, name]);
     }
 
     async updateBreed(id, updatedFields) {
         const {name} = updatedFields;
-
-        const result = await pool.query(breedQueries.updateBreed, [id, name]);
-        return result.rows[0];
+        await pool.query(breedQueries.updateBreed, [id, name]);
     }
 
     async deleteBreed(id) {
-        const result = await pool.query(breedQueries.deleteBreed, [id]);
-        return result.rows[0];
+        await pool.query(breedQueries.deleteBreed, [id]);
     }
 
     async searchBreed(size, temperament, popularity) {

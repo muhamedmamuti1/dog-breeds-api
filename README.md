@@ -43,66 +43,11 @@ Follow the steps below to set up and run the application locally:
 
 1. Create a PostgreSQL database for the project.
 
-2. Tables and indexes to create in your PostgreSQL database:
+2. After creating your local PostgreSQL database, run the following command to initialize the database schema and populate sample data:
 
-### Breeds Table
-CREATE TABLE breeds
-(
-    id          uuid         NOT NULL PRIMARY KEY,
-    name        VARCHAR(255) NOT NULL,
-    created_at  TIMESTAMP    NOT NULL DEFAULT NOW(),
-    updated_at  TIMESTAMP             DEFAULT NULL,
-    deleted_at  TIMESTAMP             DEFAULT NULL
-);
-
-CREATE INDEX idx_breeds_name ON breeds (name);
-CREATE TYPE popularity_types AS ENUM ('MOST_POPULAR', 'POPULAR', 'LEAST_POPULAR');
-
-### Breed Details Table
-CREATE TABLE breed_details
-(
-    id          uuid         NOT NULL PRIMARY KEY,
-    name        VARCHAR(255) NOT NULL,
-    size        NUMERIC(10, 2)        DEFAULT NULL,
-    temperament VARCHAR(255)          DEFAULT NULL,
-    popularity  popularity_types      DEFAULT ('POPULAR'),
-    created_at  TIMESTAMP    NOT NULL DEFAULT NOW(),
-    updated_at  TIMESTAMP             DEFAULT NULL,
-    deleted_at  TIMESTAMP             DEFAULT NULL,
-    breed_id    uuid REFERENCES breeds (id)
-);
-
-CREATE INDEX idx_breed_details_name ON breed_details (name);
-
-### Images Table
-CREATE TABLE images
-(
-    id         uuid         NOT NULL PRIMARY KEY,
-    url        VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP    NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP             DEFAULT NULL,
-    deleted_at TIMESTAMP             DEFAULT NULL,
-    breed_id   uuid REFERENCES breeds (id)
-);
-
-CREATE INDEX idx_images_url ON images (url);
-
-### Users Table
-CREATE TYPE user_roles AS ENUM ('ADMIN', 'CLIENT');
-
-CREATE TABLE users
-(
-    id         uuid         NOT NULL PRIMARY KEY,
-    first_name VARCHAR(255) NOT NULL,
-    last_name  VARCHAR(255) NOT NULL,
-    username   VARCHAR(255) NOT NULL,
-    email      VARCHAR(255) NOT NULL,
-    password   VARCHAR(255) NOT NULL,
-    role       user_roles   NOT NULL DEFAULT 'CLIENT',
-    created_at TIMESTAMP    NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP             DEFAULT NULL,
-    deleted_at TIMESTAMP             DEFAULT NULL
-);
+   ```bash
+   node initialize-database.js
+   ```
 
 3. Update the database connection configuration in `config.js` with your database credentials.
 

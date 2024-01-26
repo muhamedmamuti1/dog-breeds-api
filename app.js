@@ -6,8 +6,7 @@ const breedDetailsRoutes = require('./src/routes/breed.details.routes');
 const breedImagesRoutes = require('./src/routes/breed.images.routes');
 const getAllBreedsRoutes = require('./src/routes/get.all.breeds.routes');
 const authRoutes = require('./src/routes/auth.routes');
-const authenticateUser = require("./src/auth/authenticate");
-
+require("./src/auth/authenticate");
 const app = express();
 const port = 3000;
 

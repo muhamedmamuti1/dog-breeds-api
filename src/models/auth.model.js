@@ -6,9 +6,9 @@ const pool = new Pool(config.database);
 
 class AuthModel {
 
-    async getUsers() {
-        const result = await pool.query(authQueries.getUsers)
-        return result.rows;
+    async getUserByUsername(username) {
+        const result = await pool.query(authQueries.getUserByUsername, [username])
+        return result.rows[0];
     }
 
 }

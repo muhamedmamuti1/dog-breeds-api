@@ -37,6 +37,11 @@ class BreedImagesModel {
         const result = await pool.query(breedImagesQueries.getBreedImagesById, [id, imageId]);
         return result.rows[0];
     }
+
+    async checkIfBreedImageIsDeleted(breedId, id) {
+        const result = await pool.query(breedImagesQueries.checkIfBreedImageIsDeleted, [breedId, id]);
+        return result.rows[0];
+    }
 }
 
 module.exports = BreedImagesModel;

@@ -38,6 +38,11 @@ class BreedDetailsModel {
         const result = await pool.query(breedDetailsQueries.getAllBreedDetails);
         return result.rows;
     }
+
+    async checkIfBreedDetailsAreDeleted(breedId, id) {
+        const result = await pool.query(breedDetailsQueries.checkIfBreedDetailsAreDeleted, [breedId, id]);
+        return result.rows[0];
+    }
 }
 
 module.exports = BreedDetailsModel;

@@ -19,11 +19,12 @@ class UserController {
             const {id} = req.params;
             const user = await userModel.getUserById(id);
 
-            if (user) {
-                res.json(user);
-            } else {
-                res.status(404).send('User not found');
+            if (!user) {
+                return res.status(404).send('User not found');
             }
+
+            res.json(user);
+
         } catch (error) {
             console.error(error);
             res.status(500).send('Internal Server Error');
@@ -37,11 +38,12 @@ class UserController {
             const userExists = await userModel.getUserById(id);
 
             if (userExists) {
-                res.status(400).send("User with this id already exists!");
-            } else {
-                const user = await userModel.createUser(id, first_name, last_name, username, email, password, role);
-                res.json(user);
+                return res.status(400).send("User with this id already exists!");
             }
+
+            const user = await userModel.createUser(id, first_name, last_name, username, email, password, role);
+            res.json(user);
+
         } catch (error) {
             console.error(error);
             res.status(500).send('Internal Server Error');
@@ -54,12 +56,13 @@ class UserController {
             const updatedFields = req.body
             const userExists = await userModel.getUserById(id);
 
-            if (userExists) {
-                const updatedUser = await userModel.updateUser(id, updatedFields);
-                res.json(updatedUser);
-            } else {
-                res.status(404).send('User not found!');
+            if (!userExists) {
+                return res.status(404).send('User not found!');
             }
+
+            const updatedUser = await userModel.updateUser(id, updatedFields);
+            res.json(updatedUser);
+
         } catch (error) {
             console.error(error);
             res.status(500).send('Internal Server Error');
@@ -70,13 +73,19 @@ class UserController {
         try {
             const {id} = req.params;
             const userExists = await userModel.getUserById(id);
+            const isDeleted = await userModel.checkIfUserIsDeleted(id);
 
-            if (userExists) {
-                const deletedUser = await userModel.deleteUser(id);
-                res.json(deletedUser);
-            } else {
-                res.status(404).send('User not found');
+            if (!userExists) {
+                return res.status(404).send('User not found');
             }
+
+            if (isDeleted) {
+                return res.status(400).send('This user is already deleted!');
+            }
+
+            const deletedUser = await userModel.deleteUser(id);
+            res.json(deletedUser);
+
         } catch (error) {
             console.error(error);
             res.status(500).send('Internal Server Error');

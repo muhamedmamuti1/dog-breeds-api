@@ -1,7 +1,6 @@
 const {Pool} = require('pg');
 const config = require('../../config');
 const {breedQueries} = require("../sql/breeds.sql");
-const {breedDetailsQueries} = require("../sql/breed.details.sql");
 
 const pool = new Pool(config.database);
 
@@ -58,6 +57,11 @@ class BreedsModel {
         } catch (error) {
             throw error;
         }
+    }
+
+    async checkIfBreedIsDeleted(id) {
+        const result = await pool.query(breedQueries.checkIfBreedIsDeleted, [id]);
+        return result.rows[0];
     }
 }
 

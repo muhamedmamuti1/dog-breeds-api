@@ -33,6 +33,11 @@ class UserModel {
         const result = await pool.query(userQueries.deleteUser, [id]);
         return result.rows[0];
     }
+
+    async checkIfUserIsDeleted(id) {
+        const result = await pool.query(userQueries.checkIfUserIsDeleted, [id]);
+        return result.rows[0];
+    }
 }
 
 module.exports = UserModel;

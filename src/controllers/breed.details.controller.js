@@ -9,11 +9,12 @@ class BreedDetailsController {
             const {id} = req.params;
             const breedDetails = await breedDetailsModel.getAllBreedDetailsByBreedId(id);
 
-            if (breedDetails) {
-                res.status(404).send('Breed details not found for this id');
-            } else {
-                res.json(breedDetails);
+            if (breedDetails === null) {
+                return res.status(404).send('Breed details not found for this id');
             }
+
+            res.json(breedDetails);
+
         } catch (error) {
             console.error(error);
             res.status(500).send('Something went wrong!');
@@ -25,11 +26,12 @@ class BreedDetailsController {
             const {id, detail_id} = req.params;
             const breedDetails = await breedDetailsModel.getBreedDetailsById(id, detail_id);
 
-            if (breedDetails) {
-                res.json(breedDetails);
-            } else {
-                res.status(404).send('Breed details not found');
+            if (breedDetails === null) {
+                return res.status(404).send('Breed details not found');
             }
+
+            res.json(breedDetails);
+
         } catch (error) {
             console.error(error);
             res.status(500).send('Something went wrong!');
@@ -43,11 +45,12 @@ class BreedDetailsController {
             const breedDetailsExist = await breedDetailsModel.getBreedDetailsById(id, detail_id);
 
             if (breedDetailsExist) {
-                res.status(400).send('Breed details already exist for this id');
-            } else {
-                const breedDetails = await breedDetailsModel.createBreedDetails(detail_id, name, size, temperament, popularity, id);
-                res.json(breedDetails);
+                return res.status(400).send('Breed details already exist for this id');
             }
+
+            const breedDetails = await breedDetailsModel.createBreedDetails(detail_id, name, size, temperament, popularity, id);
+            res.json(breedDetails);
+
         } catch (error) {
             console.error(error);
             res.status(500).send('Something went wrong!');
@@ -60,12 +63,13 @@ class BreedDetailsController {
             const updatedFields = req.body
             const breedDetailsExist = await breedDetailsModel.getBreedDetailsById(id, detail_id);
 
-            if (breedDetailsExist) {
-                const updatedBreedDetails = await breedDetailsModel.updateBreedDetails(id, detail_id, updatedFields);
-                res.json(updatedBreedDetails);
-            } else {
-                res.status(404).send('Breed details not found for this id!');
+            if (!breedDetailsExist) {
+                return res.status(404).send('Breed details not found for this id!');
             }
+
+            const updatedBreedDetails = await breedDetailsModel.updateBreedDetails(id, detail_id, updatedFields);
+            res.json(updatedBreedDetails);
+
         } catch (error) {
             console.error(error);
             res.status(500).send('Something went wrong!');
@@ -76,13 +80,19 @@ class BreedDetailsController {
         try {
             const {id, detail_id} = req.params;
             const breedDetailsExist = await breedDetailsModel.getBreedDetailsById(id, detail_id);
+            const isDeleted = await breedDetailsModel.checkIfBreedDetailsAreDeleted(id, detail_id);
 
-            if (breedDetailsExist) {
-                const deletedBreedDetails = await breedDetailsModel.deleteBreedDetails(id, detail_id);
-                res.json(deletedBreedDetails);
-            } else {
-                res.status(404).send('Breed details not found');
+            if (!breedDetailsExist) {
+                return res.status(404).send('Breed details not found');
             }
+
+            if (isDeleted) {
+                return res.status(400).send('These breed details are already deleted!');
+            }
+
+            const deletedBreedDetails = await breedDetailsModel.deleteBreedDetails(id, detail_id);
+            res.json(deletedBreedDetails);
+
         } catch (error) {
             console.error(error);
             res.status(500).send('Something went wrong!');

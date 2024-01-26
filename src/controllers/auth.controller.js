@@ -6,9 +6,7 @@ const {secret} = require('../../config.js');
 class AuthController {
     async authController(req, res) {
         const {username, password} = req.body;
-        const users = await authModel.getUsers();
-
-        const user = users.find(u => u.username === username);
+        const user = await authModel.getUserByUsername(username);
 
         if (!user) {
             return res.status(401).json({message: 'Invalid username or password.'});

@@ -12,6 +12,7 @@ class BreedsController {
             const offset = (page - 1) * pageSize;
             const breeds = await breedsModel.getAllBreeds(pageSize, offset);
             res.json(breeds);
+
         } catch (error) {
             console.error(error);
             res.status(500).send('Something went wrong!');
@@ -25,11 +26,12 @@ class BreedsController {
             const breedExists = await breedsModel.getBreedById(id);
 
             if (breedExists) {
-                res.status(400).send('Breed does exist!');
-            } else {
-                const breed = await breedsModel.createBreed(id, name);
-                res.json(breed);
+                return res.status(400).send('Breed does exist!');
             }
+
+            const breed = await breedsModel.createBreed(id, name);
+            res.json(breed);
+
         } catch (error) {
             console.error(error);
             res.status(500).send('Something went wrong!');
@@ -42,12 +44,13 @@ class BreedsController {
             const updatedFields = req.body
             const breedExists = await breedsModel.getBreedById(id);
 
-            if (breedExists) {
-                const updatedBreed = await breedsModel.updateBreed(id, updatedFields);
-                res.json(updatedBreed);
-            } else {
-                res.json(404).send('Breed not found!');
+            if (!breedExists) {
+                return res.status(404).send('Breed not found!');
             }
+
+            const updatedBreed = await breedsModel.updateBreed(id, updatedFields);
+            res.json(updatedBreed);
+
         } catch (error) {
             console.error(error);
             res.status(500).send('Something went wrong!');
@@ -58,13 +61,19 @@ class BreedsController {
         try {
             const {id} = req.params;
             const breedExists = await breedsModel.getBreedById(id);
+            const isDeleted = await breedsModel.checkIfBreedIsDeleted(id);
 
-            if (breedExists) {
-                const deletedBreed = await breedsModel.deleteBreed(id);
-                res.json(deletedBreed);
-            } else {
-                res.status(404).send('Breed not found!');
+            if (!breedExists) {
+                return res.status(404).send('Breed not found!');
             }
+
+            if (isDeleted) {
+                return res.status(400).send('This breed is already deleted!');
+            }
+
+            const deletedBreed = await breedsModel.deleteBreed(id);
+            res.json(deletedBreed);
+
         } catch (error) {
             console.error(error);
             res.status(500).send('Something went wrong!');
@@ -77,11 +86,12 @@ class BreedsController {
 
             const searchBreed = await breedsModel.searchBreed(size, temperament, popularity);
 
-            if (searchBreed) {
-                res.json(searchBreed)
-            } else {
-                res.status(404).send('Breed not found!');
+            if (searchBreed === null) {
+                return res.status(404).send('Breed not found!');
             }
+
+            res.json(searchBreed)
+
         } catch (error) {
             console.log(error);
             res.status(500).send("Something went wrong!");
@@ -104,6 +114,7 @@ class BreedsController {
             };
 
             res.json(breedData);
+
         } catch (error) {
             console.log(error);
             res.status(500).send(error);
@@ -139,6 +150,7 @@ class BreedsController {
             });
 
             res.json(responsePayload);
+
         } catch (error) {
             console.log(error)
             res.status(500).send(error);

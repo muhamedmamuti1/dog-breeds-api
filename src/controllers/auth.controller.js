@@ -8,11 +8,11 @@ class AuthController {
         const {username, password} = req.body;
         const user = await authModel.getUserByUsername(username);
 
-        if (!user) {
+        if (!user || user.username !== username || user.password !== password) {
             return res.status(401).json({message: 'Invalid username or password.'});
         }
 
-        const token = jwt.sign({id: user.id, username: user.username, role: user.role}, secret, {
+        const token = jwt.sign({id: user.id, username: user.username, password: user.password, role: user.role}, secret, {
             expiresIn: '1h',
         });
 

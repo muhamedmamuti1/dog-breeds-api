@@ -26,7 +26,7 @@ class BreedsModel {
 
     async searchBreed(size, temperament, popularity) {
         const result = await pool.query(breedQueries.searchBreed, [size, temperament, popularity]);
-        return result.rows[0];
+        return result.rows;
     }
 
     async getBreedById(id) {
